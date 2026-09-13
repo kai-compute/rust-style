@@ -1,0 +1,8 @@
+.devenv/
+.direnv/
+devenv.local.nix
+devenv.local.yaml
+__pycache__/
+target/
+result
+result-*

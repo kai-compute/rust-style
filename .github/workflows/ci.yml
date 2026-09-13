@@ -1,0 +1,36 @@
+name: Validate Rust Style
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Examples and MSRV
+            command: test
+          - name: External references
+            command: shell -- verify-links
+    env:
+      DEVENV_TUI: "false"
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: cachix/install-nix-action@13d8dd58da0234aa297dedd986986ccb8e7f3e24 # v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install the locked devenv release
+        run: |
+          devenv_ref="$(jq -er '.nodes.devenv.locked | "github:\(.owner)/\(.repo)/\(.rev)"' devenv.lock)"
+          nix profile add --accept-flake-config "$devenv_ref#devenv"
+      - name: Run validation
+        run: devenv ${{ matrix.command }}
