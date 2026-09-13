@@ -55,6 +55,8 @@ Local validation passed on September 14, 2026, on `x86_64-unknown-linux-gnu`, us
 
 Run [the repository checks](../README.md#development-environment) to reproduce the current results. Counts describe revision 1.1, not a promise that later edits have been reviewed automatically.
 
+The publication workflow also passed on GitHub-hosted Ubuntu with devenv 2.3.1, including both toolchains and the external-reference check. GitHub's rendered README was inspected: all 280 heading and footnote links resolved across its 66 headings.
+
 The checks extract five complete Rust modules (B01, B02, B03, B04, B06), the D03 import excerpt, and all three E02 TOML blocks using a Markdown parser. D03 is checked only by rustfmt because it intentionally refers to unspecified surrounding code.
 
 The temporary Cargo workspace uses the exact E02 manifests and a [committed, dependency-free lockfile](../validation/Cargo.lock). The normal gate executes E01's shell commands verbatim. This covers formatting, all-target compilation, Clippy with warnings denied, unit and integration tests, a separate doctest run, and rustdoc with warnings denied. Shell examples also receive a syntax check.
