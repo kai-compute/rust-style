@@ -1,8 +1,8 @@
 # Functional Programming in Rust
 
-Companion to [Rust Style](README.md), maintained and verified in the same repository.
+Companion to [Rust Style](README.md).
 
-**Status:** Reviewed independent engineering specification and reference. **Revision:** 1.1. **Reference review date:** September 14, 2026. **Language baseline:** Rust 2024; minimum supported Rust version (MSRV) 1.85.0. **Development toolchain:** Rust 1.98.1.
+**Status:** Independent engineering specification and reference. **Revision:** 1.1. **Language baseline:** Rust 2024; minimum supported Rust version (MSRV) 1.85.0.
 
 ## Overview
 
@@ -24,7 +24,7 @@ The baseline identifies the edition and API floor targeted by the examples. It i
 
 Each fenced `rust` block is an independent example with its own `main` function and imports. Examples use only the standard library. They are intended to be saved as separate files; they are not successive fragments of a single module. Assertions in `main` specify representative expected behavior. Schematic equations appear in `text` blocks and are not Rust syntax.
 
-**Verification status:** All 25 Rust examples compile and execute on Rust 1.85.0 and 1.98.1, in both checked debug and optimized release configurations on `x86_64-unknown-linux-gnu`. An additional 19 boundary and law tests pass in the same matrix. See [Appendix C](#verification) for reproduction and the [verification report](docs/functional-verification.md) for evidence and limits.
+The examples are standalone standard-library programs and are intended to be read independently.
 
 ### Development environment
 
@@ -37,7 +37,7 @@ verify-msrv
 verify-links
 ```
 
-The checked-in [devenv configuration](devenv.nix) and [lock file](devenv.lock) supply both Rust toolchains, rustfmt, the Python Markdown parser, Nix formatting, and ShellCheck. `devenv test` runs the two code verification gates without requiring a direnv shell hook. External reference checks run separately with `devenv shell -- verify-links`. Each Rust listing is a standalone standard-library program, so this repository does not require a Cargo workspace.
+Each Rust listing is a standalone standard-library program, so this repository does not require a Cargo workspace.
 
 ### Contents
 
@@ -47,7 +47,7 @@ The checked-in [devenv configuration](devenv.nix) and [lock file](devenv.lock) s
 | [II. Functional Design and Combinator Libraries](#part-ii) | [7. Parallel computation](#chapter-7); [8. Property-based testing](#chapter-8); [9. Parser combinators](#chapter-9) |
 | [III. Common Structures in Functional Design](#part-iii) | [10. Monoids](#chapter-10); [11. Functors and monadic composition](#chapter-11); [12. Applicative validation and traversal](#chapter-12) |
 | [IV. Effects and I/O](#part-iv) | [13. External effects](#chapter-13); [14. Local mutation](#chapter-14); [15. Stream processing](#chapter-15) |
-| Appendices | [A. Conformance](#conformance); [B. Source correspondence](#source-correspondence); [C. Verification](#verification); [D. Terminology](#terminology); [References](#references) |
+| Appendices | [A. Conformance](#conformance); [B. Source correspondence](#source-correspondence); [Terminology](#terminology); [References](#references) |
 
 <a id="part-i"></a>
 ## Part I. Foundations
@@ -2507,7 +2507,7 @@ Application code SHOULD reuse well-defined concrete interfaces and standard-libr
 <a id="source-correspondence"></a>
 ## Appendix B. Correspondence with the Source Book
 
-The following table records the conceptual basis of this document. Chapter titles and organization were checked against Manning's public book and liveBook pages. The review input contained no book PDF, so this revision uses chapter references and makes no page-level verification claim. The table identifies subject correspondence; it does not attribute this document's Rust policies or examples to the authors.
+The following table records the conceptual basis of this document. Chapter titles and organization correspond to Manning's public book and liveBook pages. The table identifies subject correspondence; it does not attribute this document's Rust policies or examples to the authors.
 
 | This document | Source chapter | Conceptual basis |
 | --- | --- | --- |
@@ -2528,49 +2528,6 @@ The following table records the conceptual basis of this document. Chapter title
 | 15. Stream processing | Chapter 15 | Sources, transformations, sinks, incremental I/O, early termination, resource safety. |
 
 The original examples, exercises, and narrative are not reproduced here. The Rust examples are independent constructions using the standard library and the ownership and execution contracts stated in this document.
-
-<a id="verification"></a>
-## Appendix C. Example Verification
-
-### C.1 Verified configurations
-
-This revision contains 25 independent Rust examples, all compiled and executed on Rust 1.85.0 and 1.98.1 for `x86_64-unknown-linux-gnu`. Each compiler runs every example twice:
-
-| Configuration | Compiler flags |
-| --- | --- |
-| Checked debug | `--edition=2024 --forbid=unsafe_code --deny=warnings -C opt-level=0 -C overflow-checks=yes` |
-| Optimized release | `--edition=2024 --forbid=unsafe_code --deny=warnings -C opt-level=3 -C overflow-checks=no` |
-
-That is 100 example executions. An additional 19 tests, compiled against the extracted listings, run in all four compiler/profile combinations, giving 76 test executions. The compiler flags are documented in the `rustc` book.[^rustc-cli][^rustc-codegen]
-
-These configurations exercise the examples' intended profile-independent arithmetic behavior. Before adopting an example as maintained code, an implementer MUST also test the receiving project's supported targets and actual production contract. Successful compilation is not a proof of algebraic laws, totality, or purity for all possible inputs and callback implementations.
-
-### C.2 Reproducible checker
-
-The maintained checker is [scripts/verify_functional.py](scripts/verify_functional.py). It parses Markdown with `markdown-it-py` and its footnote plugin, extracts the 25 numbered Rust fences, checks formatting, and compiles each listing as an independent program. Test modules in `validation/functional/` are compiled against those same listings; there is no separately maintained copy of the example implementations. Python dependencies and both Rust compilers are provided by the locked devenv environment.
-
-From a clone of this repository, run:
-
-```sh
-devenv test
-devenv shell -- verify-links
-```
-
-With direnv active, `verify` checks Markdown, example and test formatting, Nix formatting, ShellCheck, and development-toolchain compilation and execution. `verify-msrv` runs the Rust 1.85.0 matrix. `verify-links` checks external URLs and their HTML fragment targets. All three commands also validate local document links and anchors.
-
-To apply the pinned rustfmt version to FUNCTIONAL.md examples:
-
-```sh
-devenv shell -- python scripts/verify_functional.py --format
-```
-
-The checker fails on a missing or wrong compiler, formatting mismatch, unresolved reference, compilation warning or error, failed assertion, or timeout. Compilations have a 120-second limit; executions have a 30-second limit. Shell listings receive Bash syntax checks. [GitHub Actions](.github/workflows/ci.yml) runs both code gates and external link verification on pushes and pull requests. Link availability is checked separately from the technical source review recorded in the [verification report](docs/functional-verification.md).
-
-### C.3 Extending the evidence
-
-The embedded assertions and additional tests are examples, not exhaustive specifications of every implementation. The added tests cover persistent-stack sharing and long-chain destruction, parser commitment and Unicode boundaries, selected algebraic laws and counterexamples, validation error order, controlled polling and cancellation of futures, and streaming reader, writer, and finalization faults. They do not exercise a real asynchronous executor or every operating-system failure.
-
-Algebraic laws SHOULD be tested with independently generated equivalent inputs or fresh computation factories. Reusing an already-consumed iterator, future, or one-shot closure is not a valid way to obtain a second execution for comparison. Reports SHOULD record the concrete failing input and all configuration needed to reproduce it.
 
 <a id="terminology"></a>
 ## Appendix D. Terminology

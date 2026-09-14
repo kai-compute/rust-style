@@ -6,7 +6,7 @@
 
 The [verification record](docs/verification.md) describes the review, corrections, executable checks, and their limits. Technical review does not constitute organizational adoption.
 
-The companion [Functional Programming in Rust](FUNCTIONAL.md) covers functional design, composition, state, and effects through 25 executable examples. Its [verification report](docs/functional-verification.md) records the additional tests and source review. Both documents share this repository's devenv and direnv environment; `verify`, `verify-msrv`, `verify-links`, and CI validate both.
+The companion [Functional Programming in Rust](FUNCTIONAL.md) covers functional design, composition, state, and effects through 25 executable examples.
 
 ## Overview
 
