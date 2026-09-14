@@ -1,10 +1,6 @@
 # Rust Style
 
-**Status:** Proposed organizational standard, technically reviewed. **Revision:** 1.1. **Reference review date:** September 14, 2026.
-
 [Overview](#overview) · [Style Guide](#style-guide) · [Style Decisions](#style-decisions) · [Best Practices](#best-practices) · [Enforcement](#enforcement) · [Repository Maintenance](#repository-maintenance) · [References](#references)
-
-The [verification record](docs/verification.md) describes the review, corrections, executable checks, and their limits. Technical review does not constitute organizational adoption.
 
 The companion [Functional Programming in Rust](FUNCTIONAL.md) covers functional design, composition, state, and effects through 25 executable examples.
 
@@ -1043,7 +1039,7 @@ Without automatic direnv activation, use `devenv shell -- verify`, `devenv shell
 
 [scripts/verify.py](scripts/verify.py) parses README Markdown, validates local links and TOML, and extracts the actual E02 manifests and Rust examples into a temporary workspace. It executes the E01 conformance commands verbatim with the committed [validation lockfile](validation/Cargo.lock), runs the examples' tests and additional [boundary tests](validation/regressions.rs), and checks three expected compiler rejections. The explicitly labeled D03 excerpt is formatted but is not compiled because its imports refer to unspecified project code.
 
-The [GitHub Actions workflow](.github/workflows/ci.yml) runs the devenv checks on pushes and pull requests. Live external references have a separate check so a remote outage is distinguishable from a code failure. See the [verification record](docs/verification.md) for the tested platform and exact scope.
+The [GitHub Actions workflow](.github/workflows/ci.yml) runs the repository checks on pushes and pull requests. Live external references have a separate check so a remote outage is distinguishable from a code failure.
 
 Edit the examples in README rather than creating independent copies. Review toolchain and dependency changes together with the resulting checks. Use `devenv update` to refresh Nix inputs deliberately and commit the resulting lockfile. Change the MSRV in both E02 and the MSRV toolchain selection in `devenv.nix`, then rerun validation before making a new compatibility claim.
 

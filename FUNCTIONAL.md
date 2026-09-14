@@ -2,7 +2,7 @@
 
 Companion to [Rust Style](README.md).
 
-**Status:** Independent engineering specification and reference. **Revision:** 1.1. **Language baseline:** Rust 2024; minimum supported Rust version (MSRV) 1.85.0.
+**Language baseline:** Rust 2024; minimum supported Rust version (MSRV) 1.85.0.
 
 ## Overview
 
@@ -2472,7 +2472,6 @@ Conformance is assessed at a component's documented interface. An effectful adap
 | FP-09 | Parser composition defines cursor validity, commitment, diagnostics, and limits. | Full-consumption tests; choice tests; progress and input-budget checks. |
 | FP-10 | Parallel or asynchronous boundaries specify ordering, failure, and progress. | Sequential-reference comparison; lifecycle tests; bounded-work policy. |
 | FP-11 | I/O boundaries specify partial progress, completion, and release. | Fault injection; partial-write assertions; flush and early-stop tests. |
-| FP-12 | Verification claims describe the evidence actually obtained. | Recorded toolchain, target, profiles, test configuration, and results. |
 
 A component MUST satisfy each applicable requirement. “Not applicable” requires an explanation tied to the interface, not an absence of tests. A departure from a `SHOULD` recommendation should identify the concrete requirement that motivates it and the evidence that the alternative preserves the relevant contract.
 
