@@ -54,7 +54,13 @@ def headings(tokens):
             suffix += 1
             anchor = f"{base}-{suffix}"
         anchors.add(anchor)
-    return anchors
+    explicit = []
+    for token in tokens:
+        for fragment in [token, *(token.children or [])]:
+            if fragment.type in {"html_block", "html_inline"}:
+                explicit.extend(node["id"] for node in BeautifulSoup(fragment.content, "html.parser").select("[id]"))
+    require(len(explicit) == len(set(explicit)), "Duplicate explicit HTML anchors")
+    return anchors | set(explicit)
 
 
 def links(tokens):
@@ -66,7 +72,7 @@ def links(tokens):
 
 
 def check_documents():
-    documents = {path: read_markdown(path) for path in [ROOT / "README.md", *sorted((ROOT / "docs").glob("*.md"))]}
+    documents = {path: read_markdown(path) for path in [ROOT / "README.md", ROOT / "FUNCTIONAL.md", *sorted((ROOT / "docs").glob("*.md"))]}
     external = set()
     count = 0
     for path, tokens in documents.items():
@@ -232,6 +238,9 @@ def main():
         check_remote_links(urls)
     else:
         check_rust(tokens, args.msrv)
+        from verify_functional import check_rust as check_functional
+
+        check_functional(read_markdown(ROOT / "FUNCTIONAL.md"), args.msrv)
 
 
 if __name__ == "__main__":
