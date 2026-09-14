@@ -1,8 +1,10 @@
 # Rust Style
 
-[Overview](#overview) · [Style Guide](#style-guide) · [Style Decisions](#style-decisions) · [Best Practices](#best-practices) · [Enforcement](#enforcement) · [Repository Maintenance](#repository-maintenance) · [References](#references)
+[Overview](#overview) · [Style Guide](#style-guide) · [Style Decisions](#style-decisions) · [Best Practices](#best-practices) · [Enforcement](#enforcement) · [Repository Maintenance](#repository-maintenance) · [References](#references) · [Rust Libraries](LIBRARIES.md)
 
 The companion [Functional Programming in Rust](FUNCTIONAL.md) covers functional design, composition, state, and effects through 25 executable examples.
+
+The [Rust Libraries](LIBRARIES.md) catalog is a maintained starting point for choosing established dependencies and reviewing their supply-chain risks.
 
 ## Overview
 

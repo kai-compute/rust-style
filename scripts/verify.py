@@ -72,7 +72,7 @@ def links(tokens):
 
 
 def check_documents():
-    documents = {path: read_markdown(path) for path in [ROOT / "README.md", ROOT / "FUNCTIONAL.md", *sorted((ROOT / "docs").glob("*.md"))]}
+    documents = {path: read_markdown(path) for path in [ROOT / "README.md", ROOT / "FUNCTIONAL.md", ROOT / "LIBRARIES.md", *sorted((ROOT / "docs").glob("*.md"))]}
     external = set()
     count = 0
     for path, tokens in documents.items():
